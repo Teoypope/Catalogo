@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Catálogo de Zapatillas | WhatsApp</title>
+  <style>
+    :root {
+      --bg: #0b0f14;
+      --card: #121826;
+      --muted: #a6b0c3;
+      --text: #e8eefc;
+      --accent: #25D366;
+      --accent2: #3b82f6;
+      --border: rgba(255,255,255,.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 20% -10%, rgba(59,130,246,.25), transparent 60%),
+                  radial-gradient(900px 500px at 100% 0%, rgba(37,211,102,.15), transparent 60%),
+                  var(--bg);
+      color: var(--text);
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(12px);
+      background: rgba(11,15,20,.72);
+      border-bottom: 1px solid var(--border);
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 16px; }
+    .title {
+      display: flex; gap: 12px; align-items: center; justify-content: space-between;
+      flex-wrap: wrap;
+    }
+    h1 { font-size: 20px; margin: 0; letter-spacing: .2px; }
+    .subtitle { color: var(--muted); font-size: 13px; margin-top: 6px; }
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    @media (min-width: 720px) {
+      .controls { grid-template-columns: 1.2fr .4fr .4fr; }
+    }
+    input, select {
+      width: 100%;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(18,24,38,.9);
+      color: var(--text);
+      outline: none;
+    }
+    input::placeholder { color: rgba(166,176,195,.7); }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      padding: 18px 16px 30px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    @media (min-width: 560px) { .grid { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 920px) { .grid { grid-template-columns: 1fr 1fr 1fr; } }
+
+    .card {
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(18,24,38,.92), rgba(18,24,38,.75));
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 10px 28px rgba(0,0,0,.35);
+      display: flex;
+      flex-direction: column;
+      min-height: 420px;
+    }
+    .img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #0f1624;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.02);
+    }
+    .content { padding: 14px 14px 16px; display: grid; gap: 10px; }
+    .pillrow { display: flex; gap: 8px; flex-wrap: wrap; }
+    .pill {
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: rgba(255,255,255,.03);
+    }
+    .ref { color: #d6e6ff; font-weight: 650; letter-spacing: .3px; }
+    .name { font-size: 16px; font-weight: 700; margin: 0; }
+    .price {
+      display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+      border-top: 1px dashed rgba(255,255,255,.12);
+      padding-top: 10px;
+      margin-top: 2px;
+    }
+    .price strong { font-size: 18px; }
+    .muted { color: var(--muted); font-size: 12px; }
+    .actions { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 6px; }
+    .btn {
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+    }
+    .btn-wa { background: rgba(37,211,102,.16); border-color: rgba(37,211,102,.35); color: #eafff2; }
+    .btn-copy { background: rgba(59,130,246,.12); border-color: rgba(59,130,246,.35); color: #eaf3ff; }
+    footer { color: var(--muted); font-size: 12px; padding: 10px 16px 26px; text-align: center; }
+    .count { color: #cfe3ff; font-weight: 650; }
+  </style>
+</head>
+
+<body>
+<header>
+  <div class="wrap">
+    <div class="title">
+      <div>
+        <h1>Catálogo</h1>
+        <div class="subtitle">
+          Pedidos por WhatsApp • Precio final ya con ganancia • <span class="count" id="count"></span>
+        </div>
+      </div>
+      <div class="pillrow">
+        <span class="pill">✅ Premium</span>
+        <span class="pill">✅ Súper Luxo</span>
+        <span class="pill">📦 Stock limitado</span>
+      </div>
+    </div>
+
+    <div class="controls">
+      <input id="q" placeholder="Buscar por REF, talle, campo, mercurial, adidas..." />
+      <select id="cat">
+        <option value="">Todas las categorías</option>
+        <option value="Infantil Campo">Infantil • Campo</option>
+      </select>
+      <select id="talle">
+        <option value="">Todos los talles</option>
+        <option value="26-32">26 al 32</option>
+        <option value="26-33">26 al 33</option>
+      </select>
+    </div>
+  </div>
+</header>
+
+<main class="grid" id="grid"></main>
+
+<footer>
+  Si querés que agregue “Futsal / Hombre / Mujer”, o que el precio se calcule solo (+$5.000 / +$7.000), decime y lo ajusto.
+</footer>
+
+<script>
+  // ✅ TU WHATSAPP (Argentina): 54 + 9 + area + número
+  const WHATSAPP = "1167248975";
+
+  // Productos (los que me pasaste)
+  const products = [
+    { ref: "156", name: "Botín Infantil Campo", category: "Infantil Campo", sizeRange: "26-32", price: 29000, img: "IMG-20251217-WA0129.jpg", tags: ["Adidas", "F50"] },
+    { ref: "107", name: "Botín Infantil Campo", category: "Infantil Campo", sizeRange: "26-32", price: 29000, img: "IMG-20251217-WA0130.jpg", tags: ["Mercurial", "Air Zoom"] },
+    { ref: "104", name: "Botín Infantil Campo", category: "Infantil Campo", sizeRange: "26-33", price: 29000, img: "IMG-20251217-WA0131.jpg", tags: ["Mercurial", "Air Zoom"] },
+    { ref: "500", name: "Botín Infantil Campo", category: "Infantil Campo", sizeRange: "26-32", price: 29000, img: "IMG-20251217-WA0132.jpg", tags: ["Mercurial", "Air Zoom"] },
+    { ref: "153", name: "Botín Infantil Campo", category: "Infantil Campo", sizeRange: "26-32", price: 29000, img: "IMG-20251217-WA0133.jpg", tags: ["Adidas", "F50"] },
+    { ref: "46",  name: "Botín Infantil Campo", category: "Infantil Campo", sizeRange: "26-32", price: 29000, img: "IMG-20251217-WA0134.jpg", tags: ["Mercurial"] },
+    { ref: "42",  name: "Botín Infantil Campo", category: "Infantil Campo", sizeRange: "26-33", price: 29000, img: "IMG-20251217-WA0135.jpg", tags: ["Mercurial"] },
+  ];
+
+  const $grid = document.getElementById("grid");
+  const $q = document.getElementById("q");
+  const $cat = document.getElementById("cat");
+  const $talle = document.getElementById("talle");
+  const $count = document.getElementById("count");
+
+  function moneyARS(n) {
+    // formato simple ARS
+    return "$" + n.toLocaleString("es-AR");
+  }
+
+  function buildWA(product) {
+    const talleTxt = product.sizeRange === "26-32" ? "26 al 32" : "26 al 33";
+    const text =
+`Hola! Quiero este modelo:
+• ${product.name}
+• REF: ${product.ref}
+• Talles: ${talleTxt}
+• Precio: ${moneyARS(product.price)}
+
+¿Tenés stock? ¿Qué talle te queda?`;
+    return `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
+  }
+
+  async function copyText(product) {
+    const talleTxt = product.sizeRange === "26-32" ? "26 al 32" : "26 al 33";
+    const txt = `${product.name} | REF ${product.ref} | Talles ${talleTxt} | ${moneyARS(product.price)} ✅`;
+    try {
+      await navigator.clipboard.writeText(txt);
+      alert("Copiado ✅\n\n" + txt);
+    } catch (e) {
+      prompt("Copiá el texto:", txt);
+    }
+  }
+
+  function card(p) {
+    const talleTxt = p.sizeRange === "26-32" ? "26 al 32" : "26 al 33";
+    const tags = [p.category, `Talles ${talleTxt}`, ...p.tags].filter(Boolean);
+
+    const el = document.createElement("article");
+    el.className = "card";
+    el.innerHTML = `
+      <div class="img">
+        <img src="${p.img}" alt="${p.name} REF ${p.ref}">
+      </div>
+      <div class="content">
+        <div class="pillrow">
+          ${tags.slice(0,4).map(t => `<span class="pill">${t}</span>`).join("")}
+        </div>
+        <div class="ref">REF: ${p.ref}</div>
+        <p class="name">${p.name}</p>
+
+        <div class="price">
+          <div>
+            <div class="muted">Precio</div>
+            <strong>${moneyARS(p.price)}</strong>
+          </div>
+          <div class="muted">Calidad Premium / Súper Luxo</div>
+        </div>
+
+        <div class="actions">
+          <a class="btn btn-wa" href="${buildWA(p)}" target="_blank" rel="noopener">
+            Pedir por WhatsApp
+          </a>
+          <button class="btn btn-copy" type="button">
+            Copiar texto para estado
+          </button>
+        </div>
+      </div>
+    `;
+
+    el.querySelector(".btn-copy").addEventListener("click", () => copyText(p));
+    return el;
+  }
+
+  function normalize(s) {
+    return (s || "").toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
+  function render() {
+    const q = normalize($q.value);
+    const cat = $cat.value;
+    const talle = $talle.value;
+
+    const filtered = products.filter(p => {
+      const hay = normalize([p.ref, p.name, p.category, p.sizeRange, ...(p.tags||[])].join(" "));
+      const okQ = !q || hay.includes(q);
+      const okC = !cat || p.category === cat;
+      const okT = !talle || p.sizeRange === talle;
+      return okQ && okC && okT;
+    });
+
+    $grid.innerHTML = "";
+    filtered.forEach(p => $grid.appendChild(card(p)));
+    $count.textContent = `${filtered.length} modelo(s)`;
+  }
+
+  $q.addEventListener("input", render);
+  $cat.addEventListener("change", render);
+  $talle.addEventListener("change", render);
+
+  render();
+</script>
+</body>
+</html>
