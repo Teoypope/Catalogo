@@ -101,29 +101,52 @@
     .input::placeholder{color:rgba(167,180,199,.75)}
     select{appearance:none}
 
+    /* =========================================================
+       ✨ CAMBIO ESTÉTICO: GRILLA MÁS COOL + CUADRADITOS MÁS CHICOS
+       (integrado, NO en partes)
+       ========================================================= */
+
+    /* Base */
     .grid{
       margin-top: 14px;
       display:grid;
-      gap: 14px;
-      grid-template-columns: 1fr;
+      gap: 12px;
+      grid-template-columns: 1fr; /* celu */
     }
-    @media (min-width: 700px){
-      .grid{grid-template-columns: 1fr 1fr;}
+    /* Tablet: 2 columnas */
+    @media (min-width: 600px){
+      .grid{ grid-template-columns: 1fr 1fr; }
+    }
+    /* PC: 3 columnas (cuadraditos más chicos) */
+    @media (min-width: 980px){
+      .grid{ grid-template-columns: 1fr 1fr 1fr; }
+    }
+
+    /* (Opcional integrado) En celulares chicos, 2 columnas mini */
+    @media (max-width: 520px){
+      .grid{ grid-template-columns: 1fr 1fr; }
     }
 
     .card{
       border: 1px solid var(--border);
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(15,22,32,.62), rgba(12,18,26,.62));
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(15,22,32,.70), rgba(12,18,26,.75));
       box-shadow: var(--shadow);
       overflow:hidden;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .card:hover{
+      transform: translateY(-3px);
+      border-color: rgba(120,220,160,.28);
+      box-shadow: 0 18px 45px rgba(0,0,0,.42);
     }
 
     .hero{
       position: relative;
       background: #05080d;
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 1 / 1; /* más cuadrado */
       overflow:hidden;
+      cursor: pointer;
     }
     .hero img{
       width:100%;
@@ -135,8 +158,8 @@
 
     .thumbs{
       display:flex;
-      gap:10px;
-      padding: 10px 12px 0;
+      gap:8px;
+      padding: 8px 10px 0;
       overflow:auto;
       -webkit-overflow-scrolling: touch;
     }
@@ -144,9 +167,9 @@
     .thumbs::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12); border-radius:999px}
     .thumb{
       flex: 0 0 auto;
-      width: 58px;
-      height: 44px;
-      border-radius: 12px;
+      width: 48px;
+      height: 38px;
+      border-radius: 10px;
       overflow:hidden;
       border: 1px solid rgba(255,255,255,.12);
       opacity: .82;
@@ -160,7 +183,7 @@
     .thumb img{width:100%; height:100%; object-fit: cover; display:block}
 
     .content{
-      padding: 10px 14px 14px;
+      padding: 10px 12px 12px;
     }
 
     .tagrow{
@@ -170,25 +193,29 @@
       margin: 8px 0 10px;
     }
     .tag{
-      font-size: 12.5px;
+      font-size: 11.5px;
       color: rgba(233,238,246,.92);
       border: 1px solid rgba(255,255,255,.11);
       background: rgba(10,14,20,.35);
-      padding: 7px 10px;
+      padding: 6px 9px;
       border-radius: 999px;
       white-space: nowrap;
     }
 
     .name{
       margin: 6px 0 6px;
-      font-size: 20px;
+      font-size: 16.5px;
       font-weight: 800;
       letter-spacing:.2px;
     }
     .note{
-      margin:0 0 12px;
+      margin:0 0 10px;
       color: var(--muted);
-      font-size: 13.5px;
+      font-size: 12.5px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     .priceRow{
@@ -196,9 +223,9 @@
       justify-content:space-between;
       gap: 14px;
       align-items:flex-end;
-      padding: 10px 0 12px;
+      padding: 8px 0 10px;
       border-top: 1px dashed rgba(255,255,255,.12);
-      margin-top: 10px;
+      margin-top: 8px;
     }
     .priceLabel{
       font-size: 12px;
@@ -206,7 +233,7 @@
       margin-bottom: 4px;
     }
     .price{
-      font-size: 28px;
+      font-size: 22px;
       font-weight: 900;
       letter-spacing:.3px;
     }
@@ -223,9 +250,9 @@
       background: linear-gradient(180deg, var(--btn2), var(--btn));
       color: #eafff2;
       font-weight: 850;
-      font-size: 16.5px;
-      padding: 14px 16px;
-      border-radius: 16px;
+      font-size: 15px;
+      padding: 12px 14px;
+      border-radius: 14px;
       cursor:pointer;
       box-shadow: 0 10px 25px rgba(0,0,0,.25);
     }
@@ -306,6 +333,7 @@
   <header>
     <div class="wrap">
       <h1 class="title">Catálogo semanal – Calzados Importados Premium</h1>
+      <h1 class="title">(Talles Brasileros)</h1>
       <p class="subtitle">
         <span>Ingresos de la semana</span>
         <span>·</span>
@@ -320,7 +348,7 @@
     <div class="container">
       <!-- ✅ filtros scrollean (NO sticky) -->
       <section class="controls">
-        <input id="q" class="input" placeholder="Buscar (ej: ojotas, mujer, infantil, botines...)" />  
+        <input id="q" class="input" placeholder="Buscar (ej: ojotas, mujer, infantil, botines...)" />
 
         <div class="row3">
           <select id="cat">
@@ -365,23 +393,113 @@
 
     // =============================
     // DATA: productos
-    // - "images": podés cargar varias fotos del MISMO modelo (distintos colores)
-    // - NO usamos "REF"
-    // - "note": aclaración tipo "Talles en cada foto"
+    // - "images": varias fotos del MISMO modelo
+    // - Sin errores de coma final
+    // - IDs únicos (IMPORTANTE)
+    // - Jordan corregido con category/type/brand
     // =============================
     const PRODUCTS = [
-        {
+
+    {
+    id: "34",
+    name: "NIKE AIR MAX TN 2",
+    category: "Hombre",
+    type: "Zapatillas",
+    price: 45000,
+    note: "Tallle del 38 al 43",
+    images: [
+      "WhatsApp Image 2025-12-30 at 11.40.30.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.40.31.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.40.32.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.40.33.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.40.34.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.40.35.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.40.36.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.40.37.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.40.38.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.40.39.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.40.40.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.40.41.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.40.42.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.40.43.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.40.44.jpeg",
+
+      
+    ]
+  },
+
+    {
+    id: "33",
+    name: "Nike Air force Blanca",
+    category: "Hombre/Mujer",
+    type: "Zapatillas",
+    price: 31000,
+    note: "Tallle del 34 al 43",
+    images: [
+      "WhatsApp Image 2025-12-30 at 11.52.06.jpeg",
+      
+    ]
+  },
+
+    {
+    id: "32",
+    name: "Nike",
+    category: "Hombre/Mujer",
+    type: "Zapatillas",
+    price: 31000,
+    note: "Tallle del 38 al 43",
+    images: [
+      "WhatsApp Image 2025-12-30 at 11.52.55.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.52.56.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.52.57.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.52.58.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.52.59.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.52.60.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.52.61.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.52.62.jpeg",
+      
+    ]
+  },
+
+    {
+    id: "31",
+    name: "Adidas",
+    category: "Hombre/Mujer",
+    type: "Zapatillas",
+    price: 39000,
+    note: "Numero en cada foto",
+    images: [
+      "WhatsApp Image 2025-12-30 at 11.53.31.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.53.32.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.53.33.jpeg",
+      "WhatsApp Image 2025-12-30 at 11.53.34.jpeg"
+    ]
+  },
+
+{
+    id: "30",
+    name: "Baby kiss",
+    category: "Infantil",
+    type: "Zandalias",
+    price: 20000,
+    note: "Con Cajitas",
+    images: [
+      "IMG-20251217-WA01353.jpeg",
+      "IMG-20251217-WA01354.jpeg",
+    ]
+  },
+
+      {
         id: "9",
         name: "Zapatillas Topper",
         category: "Hombre",
         type: "Zapatillas",
-        brand: "Linea Premium", 
-        price: 33000,
-        quality: [], 
+        brand: "Linea Premium",
+        price: 37000,
+        quality: [],
         note: "Talles 38 al 43",
         images: [
-            "IMG-20251215-WA0036.jpg",
-          
+          "IMG-20251215-WA0036.jpg"
         ]
       },
 
@@ -390,9 +508,9 @@
         name: "Adidas Campus",
         category: "Hombre/Mujer",
         type: "Zapatillas",
-        brand: "Linea Premium", 
-        price: 27000,
-        quality: [], 
+        brand: "Linea Premium",
+        price: 31000,
+        quality: [],
         note: "Talles disponibles en la foto.",
         images: [
           "IMG-20251217-WA0007.jpg",
@@ -407,7 +525,7 @@
           "IMG-20251217-WA0016.jpg",
           "IMG-20251217-WA0017.jpg",
           "IMG-20251217-WA0018.jpg",
-          "IMG-20251217-WA0019.jpg",
+          "IMG-20251217-WA0019.jpg"
         ]
       },
 
@@ -416,35 +534,40 @@
         name: "Borcego Caterpillar",
         category: "Hombre",
         type: "Borcego",
-        brand: "Linea Premium", 
-        price: 32000, 
+        brand: "Linea Premium",
+        price: 36000,
+        quality: [],
         note: "Talles 34 al 39",
         images: [
-            "IMG-20251217-WA0020.jpg",
+          "IMG-20251217-WA0020.jpg"
         ]
       },
 
       {
         id: "12",
         name: "JORDANJ27",
-        brand: "Zapatillas", 
-        price: 50000, 
+        category: "Hombre/Mujer",
+        type: "Zapatillas",
+        brand: "Jordan",
+        price: 53000,
         quality: ["Premium", "Bolsita Personalizada"],
         note: "Talles 34 al 39",
         images: [
-            "IMG-20251217-WA0021.jpg",
+          "IMG-20251217-WA0021.jpg"
         ]
       },
 
       {
         id: "13",
         name: "Jordan",
-        brand: "Zapatillas", 
-        price: 31000, 
-        quality: ["Premium",],
+        category: "Hombre/Mujer",
+        type: "Zapatillas",
+        brand: "Jordan",
+        price: 35000,
+        quality: ["Premium"],
         note: "Talles 34 al 38",
         images: [
-            "IMG-20251217-WA0022.jpg",
+          "IMG-20251217-WA0022.jpg"
         ]
       },
 
@@ -453,34 +576,31 @@
         name: "Botines Infantil Campo",
         category: "Infantil",
         type: "Botines",
-        brand: "Nike", // ✅ corregido (antes decía Adidas)
-        price: 29000,
-        quality: ["Premium", "Súper Luxo"], // ✅ ambos
+        brand: "Nike",
+        price: 33000,
+        quality: ["Premium", "Súper Luxo"],
         note: "Talles en cada foto 😉👆 (elegí la foto/opción)",
         numbersHint: "ver en cada foto",
         images: [
-          // ✅ fotos que ya subiste al repo (mismo modelo con colores/fotos)
           "IMG-20251217-WA0129.jpg",
           "IMG-20251217-WA0130.jpg",
           "IMG-20251217-WA0131.jpg",
           "IMG-20251217-WA0132.jpg",
           "IMG-20251217-WA0133.jpg",
           "IMG-20251217-WA0134.jpg",
-          "IMG-20251217-WA0135.jpg",
+          "IMG-20251217-WA0135.jpg"
         ]
       },
 
-      // 👇 Este es un ejemplo de otro producto (ojotas mujer)
-      // Reemplazá las imágenes por los nombres reales que subas al repo.
       {
         id: "2",
         name: "Ojotas tipo slide",
         category: "Mujer/Hombre",
         type: "Ojotas",
-        brand:  "Adidas/Nike",
-        price: 19000,
+        brand: "Adidas/Nike",
+        price: 24000,
         quality: ["Premium"],
-        note: " Suela MICRO EXPANDIDO PURO. Forrado y costurada. Super confortable. Óptima terminaciónes. FOTO REAL. TALLES: 38/38 al 42/43",
+        note: "Suela MICRO EXPANDIDO PURO. Forrado y costurada. Super confortable. Óptima terminaciónes. FOTO REAL. TALLES: 38/38 al 42/43",
         numbersHint: "ver en cada foto",
         images: [
           "IMG-20251216-WA0022.jpg",
@@ -506,10 +626,10 @@
         name: "Ojotas con bandas",
         category: "Hombre",
         type: "Ojotas",
-        brand: "Varios", 
-        price: 13000,
-        quality: ["Premium"], 
-        note: "37 al 48 ",
+        brand: "Varios",
+        price: 18000,
+        quality: ["Premium"],
+        note: "37 al 48",
         numbersHint: "ver en cada foto",
         images: [
           "IMG-20251212-WA0064.jpg",
@@ -525,19 +645,19 @@
           "IMG-20251212-WA0074.jpg",
           "IMG-20251212-WA0075.jpg",
           "IMG-20251212-WA0076.jpg",
-          "IMG-20251212-WA0077.jpg",
+          "IMG-20251212-WA0077.jpg"
         ]
       },
 
-       {
+      {
         id: "4",
         name: "Ojotas con bandas en caja",
         category: "Hombre/Mujer",
         type: "Ojotas",
-        brand: "Havahianas", 
-        price: 19000,
-        quality: ["Premium"], 
-        note: "37 al 44 ",
+        brand: "Havahianas",
+        price: 23000,
+        quality: ["Premium"],
+        note: "37 al 44",
         numbersHint: "ver en cada foto",
         images: [
           "IMG-20251216-WA0021.jpg",
@@ -545,24 +665,24 @@
           "IMG-20251216-WA0014.jpg",
           "IMG-20251216-WA0015.jpg",
           "IMG-20251216-WA0016.jpg",
-          "IMG-20251216-WA0017.jpg",
+          "IMG-20251216-WA0017.jpg"
         ]
       },
-      
+
       {
         id: "5",
         name: "Ojotas caterpillar",
         category: "Hombre",
         type: "Ojotas",
-        brand: "Caterpillar", 
-        price: 24000,
-        quality: ["Premium"], 
+        brand: "Caterpillar",
+        price: 29000,
+        quality: ["Premium"],
         note: "37 al 44 Cuero costurado",
         numbersHint: "Cuero costurado",
         images: [
           "IMG-20251212-WA0080.jpg",
           "IMG-20251212-WA0081.jpg",
-          "IMG-20251212-WA0082.jpg",
+          "IMG-20251212-WA0082.jpg"
         ]
       },
 
@@ -571,9 +691,9 @@
         name: "ojotas/sandalias",
         category: "Hombre/Mujer",
         type: "Ojotas/sandalias",
-        brand: "Varios", 
-        price: 19000,
-        quality: ["Premium"], 
+        brand: "Varios",
+        price: 23000,
+        quality: ["Premium"],
         note: "Números disponibles solo los que estan en cada foto 👆. Últimos pares ☺",
         images: [
           "IMG-20251216-WA0095.jpg",
@@ -605,18 +725,18 @@
           "IMG-20251216-WA0124.jpg",
           "IMG-20251216-WA0125.jpg",
           "IMG-20251216-WA0126.jpg",
-          "IMG-20251216-WA0127.jpg",
+          "IMG-20251216-WA0127.jpg"
         ]
       },
 
       {
-        id: "6",
+        id: "14",
         name: "Zapatillas Vanz Knu",
         category: "Hombre/Mujer",
         type: "Zapatillas",
-        brand: "Vanz Knu", 
-        price: 40000,
-        quality: ["Premium","Plantilla en gel","Papel seda","Cordones gruesos"], 
+        brand: "Vanz Knu",
+        price: 44000,
+        quality: ["Premium", "Plantilla en gel", "Papel seda", "Cordones gruesos"],
         note: "Talles en cada foto 🥳",
         images: [
           "IMG-20251215-WA0066.jpg",
@@ -624,7 +744,7 @@
           "IMG-20251215-WA0067.jpg",
           "IMG-20251215-WA0069.jpg",
           "IMG-20251215-WA0070.jpg",
-          "IMG-20251215-WA0071.jpg",
+          "IMG-20251215-WA0071.jpg"
         ]
       },
 
@@ -633,27 +753,27 @@
         name: "Zapatillas Vanz U Upland",
         category: "Hombre/Mujer",
         type: "Zapatillas",
-        brand: "Vanz U Upland", 
-        price: 42000,
-        quality: ["Premium"], 
+        brand: "Vanz U Upland",
+        price: 45000,
+        quality: ["Premium"],
         note: "Talles 34 al 43 excepto las ultimas dos solo hasta el 39",
         images: [
           "IMG-20251215-WA0072.jpg",
           "IMG-20251215-WA0073.jpg",
           "IMG-20251215-WA0074.jpg",
           "IMG-20251215-WA0075.jpg",
-          "IMG-20251215-WA0076.jpg",
+          "IMG-20251215-WA0076.jpg"
         ]
       },
 
-       {
+      {
         id: "8",
         name: "Zapatillas Puma",
         category: "Hombre/Mujer",
         type: "Zapatillas",
-        brand: "Linea Premium", 
-        price: 35000,
-        quality: [], 
+        brand: "Linea Premium",
+        price: 39000,
+        quality: [],
         note: "Talles 34 al 39",
         images: [
           "IMG-20251215-WA0030.jpg",
@@ -661,10 +781,9 @@
           "IMG-20251215-WA0032.jpg",
           "IMG-20251215-WA0033.jpg",
           "IMG-20251215-WA0034.jpg",
-          "IMG-20251215-WA0026.jpg",
+          "IMG-20251215-WA0026.jpg"
         ]
-      },
-
+      }
     ];
 
     // ================
@@ -693,7 +812,6 @@
     }
 
     function buildWhatsAppLink(p, selectedIndex){
-      // ✅ Mensaje pensado para que el cliente elija "foto/opción" sin escribir colores
       const opt = (typeof selectedIndex === "number") ? (selectedIndex + 1) : 1;
 
       const qualities = (p.quality && p.quality.length)
@@ -829,7 +947,7 @@
         // thumbs click
         const thumbs = card.querySelectorAll(".thumb");
         thumbs.forEach(t=>{
-          t.addEventListener("click", (e)=>{
+          t.addEventListener("click", ()=>{
             const idx = Number(t.getAttribute("data-idx"));
             state.selectedImage[p.id] = idx;
             render();
@@ -890,7 +1008,7 @@
           state.selectedImage[p.id] = i;
           title.textContent = `${p.name} — Opción ${idx+1}`;
           img.src = images[idx] || "";
-          openModal(p, idx); // re-render thumbs active
+          openModal(p, idx);
         });
         thumbs.appendChild(d);
       });
@@ -943,8 +1061,8 @@
   ================================
   ✅ PLANTILLA PARA AGREGAR PRODUCTOS
   Copiá/pegá un bloque dentro de PRODUCTS y editá:
-  - name, category, type, brand, price, quality, note, images[]
-  - images[]: poné los nombres EXACTOS de los archivos subidos al repo
+  - id (único), name, category, type, brand, price, quality, note, images[]
+  - images[]: nombres EXACTOS de archivos subidos
   ================================
   {
     id: "un-id-unico",
